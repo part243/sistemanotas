@@ -79,17 +79,20 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         <div class="position-absolute top-0 end-0">
             <?php 
             //get sesion role
-                $role = Yii::$app->cache->get('userRoleNames_' . Yii::$app->user->id);
+            
+                $role = Yii::$app->cache->get('RolesOlyNameList_' . Yii::$app->user->id);
+               
                 if($role){
-                    for ($i=0; $i < count($role) ; $i++) { 
-                        if($role[$i] == 'SuperAdmin')
-                            echo '<span class="badge rounded-pill bg-danger ml-2">'. ucfirst($role[$i]).'</span><br>';
-                        else 
-                            if($role[$i] == 'profesor')
-                                echo '<span class=" badge rounded-pill bg-success text-white ml-2">'.ucfirst($role[$i]).'</span><br>';
-                            else
-                            echo '<span class=" badge rounded-pill bg-info text-white ml-2">'.ucfirst($role[$i]).'</span><br>';
-                        }
+                    $index = 0;
+                    foreach ($role as $roleName) {
+                        if ($role[$index] == 'SuperAdmin')
+                            echo '<span class="badge rounded-pill bg-danger ml-2">' . $roleName . '</span><br>';
+                        else if ($role[$index] == 'profesor')
+                            echo '<span class="badge rounded-pill bg-success text-white ml-2">' . $roleName . '</span><br>';
+                        else
+                            echo '<span class="badge rounded-pill bg-info text-white ml-2">' . $roleName. '</span><br>';
+                        $index = $index + 1;
+                            }
                  }
             ?>
         </div>

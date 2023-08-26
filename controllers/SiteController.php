@@ -125,7 +125,9 @@ class SiteController extends Controller
 
         if ($model->load(Yii::$app->request->post()) ) {
             if($model->login()){
+
                 Yii::$app->session->set('userId', Yii::$app->user->identity->id);
+                //Yii::$app->session->set('rolesNames', $model->roles());
                 return $this->goBack();
             }else{
                 return $this->render('login', [
@@ -150,6 +152,8 @@ class SiteController extends Controller
      */
     public function actionLogout()
     {
+        Yii::$app->cache->delete('userRoleNames_' . Yii::$app->user->id);
+        Yii::$app->cache->delete('RolesOlyNameList_' . Yii::$app->user->id);
         Yii::$app->user->logout();
 
         return $this->goHome();

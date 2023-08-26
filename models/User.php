@@ -31,9 +31,8 @@ class User extends ActiveRecord implements IdentityInterface
     public $confirmPassword;
     public $temporalpassword;
     public $tempralpasswordtime;
+    public $_roleNames = [];
 
-    
-    //public $_roleNames = [];
     /**
      * {@inheritdoc}
      */
@@ -133,6 +132,8 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->auth_key;
     }
 
+ 
+
     public function validateAuthKey($authkey)
     {
         return $this->auth_key === $authkey;
@@ -188,11 +189,12 @@ class User extends ActiveRecord implements IdentityInterface
                 ->orderBy(['role_id' => SORT_DESC])
                 ->all();
     
-            foreach ($authAssignmentRoles as $authAssignmentRole) {
-                $role = $authAssignmentRole->getRole()->one();
+            foreach ($authAssignmentRoles as $rolesrelacion) {
+                $role = $rolesrelacion->getRole()->one();
                 $roleNames[] = $role->name_role;
             }
-    
+            
+
             return $roleNames;
         });
     }

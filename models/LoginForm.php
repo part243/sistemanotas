@@ -49,19 +49,27 @@ class LoginForm extends Model
                     Yii::$app->session->set('iddatospersonales', $datosPersonales->id);
                     Yii::$app->session->set('ci', $datosPersonales->ci);
                     Yii::$app->session->set('nombres', $datosPersonales->ApellidoPaterno." ".$datosPersonales->ApellidoMaterno." ".$datosPersonales->Nombres);
+                    //$user->getRoleNames();
                     Yii::$app->session->set('email', $datosPersonales->email);
                     $authAssignmentRoles = $user->getAuthAssignmentRoles()
                                         ->orderBy(['role_id' => SORT_DESC])
                                         ->all();
                     $role = [];
-                    foreach ($authAssignmentRoles as $authAssignmentRole) {
-                        $rol = $authAssignmentRole->getRole()->one();
+                    $rolecache = [];
+                    foreach ($authAssignmentRoles as $roluser) {
+                        $rol = $roluser->getRole()->one();
                         $role[] = [
                             'id' => $rol->id,
                             'name' => $rol->name_role
                         ];
+                        $rolecache[] = $rol->name_role;
                     }
-                   //Yii::$app->session->set('role', $role);
+                    //set cat in userid
+                    Yii::$app->cache->getOrSet('RolesOlyNameList_' . $user->id , function () use ($rolecache) {
+                        return $rolecache;
+                    });
+
+                    Yii::$app->session->set('roleNamesddd', $rolecache);
                     return true; 
                 } else {
                     Yii::$app->user->logout(); 
